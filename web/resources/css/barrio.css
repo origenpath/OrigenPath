@@ -1,0 +1,110 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 8/04/2016, 10:11:12 AM
+    Author     : daniel
+*/
+
+
+.ui-button{
+
+    background: #00AC98;
+    color: #ffffff;
+}
+.ui-button:hover{
+    background: white;
+    color: black;
+}
+/*.ui-button{
+    color: white;
+}*/
+.ui-menu .ui-menuitem-text:hover{
+    color: #ffffff;
+}
+.ui-menu{
+    background: #00AC98 !important;
+    border: none !important;
+}
+.ui-menu .ui-menuitem{
+    background: #00AC98;
+    border: none !important;
+}
+.ui-menu .ui-menu-list{
+    border: none !important;
+}
+.ui-toolbar{
+    background: #00AC98 !important;
+}
+
+.ui-toolbar .ui-button{
+    background: #00AC98;
+    color: #ffffff;
+    height: 40px;
+
+}
+.ui-toolbar .ui-button:hover{
+    background: #ffffff;
+    color: #000000;
+    height: 40px;
+    border: 0;
+}
+.ui-dialog .ui-dialog-content .ui-button{
+    background: #00AC98;
+    color: #ffffff;
+}
+.ui-dialog .ui-dialog-content .ui-button:hover{
+    background: #ffffff;
+    color: #000000;
+}
+
+.ui-dialog .ui-dialog-content .ui-inputtext:focus{
+    border-color: #00AC98;
+}
+
+.ui-messages-info{
+    color: #3c763d !important;
+    background-color: #dff0d8 !important;
+    border-color: #d6e9c6 !important;
+}
+.ui-messages-info-icon{
+    color: #3c763d !important;
+    background-color: #dff0d8 !important;
+    border-color: #d6e9c6 !important;
+}
+
+.ui-fieldset .ui-inputtext:focus{
+    border-color: #00AC98;
+}
+.ui-fieldset .ui-inputmask:focus{
+    border-color: #00AC98;
+}
+.ui-fieldset .ui-password:focus{
+    border-color: #00AC98;
+}
+.ui-fieldset{
+    border-color: #00AC98;    
+}
+
+.ui-fieldset .ui-fieldset-legend{
+    background: #00AC98;
+    color: #ffffff;
+
+}
+
+.ui-autocomplete .ui-autocomplete-input {
+    width: 300px;
+}
+
+.lblcantidad{
+     margin-left: 5px;
+}
+.agregar{
+     margin-left: 5px;
+}
+.cantidad{
+    width: 30px;
+   
+}

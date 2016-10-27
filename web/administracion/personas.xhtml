@@ -1,0 +1,521 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>Personas</title>
+        <h:outputStylesheet library="css" name="barrio.css" />
+        <h:outputStylesheet library="css" name="personas.css"/>
+    </h:head>
+    <h:body>
+        <ui:include src="../template.xhtml"/>
+        <h1>Administrar Personas</h1>
+        <p:growl id="messages" autoUpdate="true" life="4000"/>
+        <h:form id="ftabla">
+            <br/>
+            <p:commandButton value="Nuevo Registro" type="button" onclick="PF('wdlgDatos').show();"/>
+            <br/>
+            <br/>
+            <p:dataTable id="tabla" var="p" value="#{personasControlador.listPersonas}">
+                <p:column style="width:15px">
+                    <p:rowToggler/>
+                </p:column>
+                <p:column headerText="Cedula">
+                    <h:outputText value="#{p.cedula}" />
+                </p:column>
+                <p:column headerText="Nombre">
+                    <h:outputText value="#{p.nombres}"/>
+                </p:column>
+                <p:column headerText="Primer Apellido">
+                    <h:outputText value="#{p.primerApellido}"/>
+                </p:column>
+                <p:column headerText="Segundo Apellido">
+                    <h:outputText value="#{p.segundoApellido}"/>
+                </p:column>
+                <p:column headerText="Fecha Nacimiento">
+                    <h:outputText value="#{p.fechaNacimiento}"/>
+                </p:column>
+                <p:column headerText="Genero">
+                    <h:outputText value="#{p.genero.nombreGenero}"/>
+                </p:column>
+                <p:column headerText="Estado Civil">
+                    <h:outputText value="#{p.estadoCivil.nombreEstadoCivil}"/>
+                </p:column>
+                <p:column headerText="Estado Persona">
+                    <h:outputText value="#{p.estadoPersona.nombreEstadoPersonas}"/>
+                </p:column>
+                <p:column headerText="Ocupacion">
+                    <h:outputText value="#{p.ocupacion}"/>
+                </p:column>
+                <p:column style="width: 20px">
+                    <p:commandLink actionListener="#{personasControlador.buscarPersona(p.cedula)}" oncomplete="PF('wdlgDatos2').show();" update="mdatos" styleClass="ui-icon ui-icon-pencil"/>
+                </p:column>
+                <p:column style="width: 20px">
+                    <p:commandLink actionListener="#{personasControlador.eliminarPersona(p.cedula)}" update="tabla" styleClass="ui-icon ui-icon-trash"/>
+                </p:column>
+                <p:rowExpansion>
+                    <p:panelGrid columns="2" columnClasses="grid,grid">
+                        <f:facet name="header" >
+                            <h:outputText value="Informacion General"/>
+                        </f:facet>
+                        <p:panelGrid columns="2">
+                            <h:outputText value="Cedula"/>
+                            <h:outputText value="#{p.cedula}"/>
+                            <h:outputText value="Nombre"/>
+                            <h:outputText value="#{p.nombres}"/>
+                            <h:outputText value="Primer Apellido"/>
+                            <h:outputText value="#{p.primerApellido}"/>
+                            <h:outputText value="Segundo Apellido"/>
+                            <h:outputText value="#{p.segundoApellido}"/>
+                            <h:outputText value="Fecha nacimineto"/>
+                            <h:outputText value="#{p.fechaNacimiento}"/>
+                            <h:outputText value="Genero"/>
+                            <h:outputText value="#{p.genero.nombreGenero}"/>
+                            <h:outputText value="Estado Civil"/>
+                            <h:outputText value="#{p.estadoCivil.nombreEstadoCivil}"/>
+                            <h:outputText value="Estado Persona"/>
+                            <h:outputText value="#{p.estadoPersona.nombreEstadoPersonas}"/>                        
+                            <h:outputText value="Ocupacion"/>
+                            <h:outputText value="#{p.ocupacion}"/>                        
+                            <h:outputText value="Referido"/>
+                            <h:outputText value="#{p.referido.nombres}"/>                        
+                        </p:panelGrid>
+                        <p:panelGrid columns="2" style="margin-top: -27px;">
+                            <h:outputText value="Telefono"/>
+                            <h:outputText value="#{p.telefono}"/>
+                            <h:outputText value="Celular"/>
+                            <h:outputText value="#{p.celular}"/>
+                            <h:outputText value="Correo"/>
+                            <h:outputText value="#{p.correo}"/>
+                            <h:outputText value="Barrio"/>
+                            <h:outputText value="#{p.barrio.nombreBarrio}"/>
+                            <h:outputText value="Direccion"/>
+                            <h:outputText value="#{p.direccion}"/>
+                            <h:outputText value="Usuario"/>
+                            <h:outputText value="#{p.usuario}"/>
+                            <h:outputText value="Contraseña"/>
+                            <h:outputText value="#{p.contraseña}"/>
+                            <h:outputText value="Rol"/>
+                            <h:outputText value="#{p.rol.nombreRol}"/>
+                            <h:outputText value="Nivel Educacion"/>
+                            <h:outputText value="#{p.nivelEducacion}"/>                        
+                        </p:panelGrid>
+                    </p:panelGrid>
+                </p:rowExpansion>
+            </p:dataTable>
+        </h:form>
+        <p:dialog header="Nuevo Registro" widgetVar="wdlgDatos" modal="true" width="955" height="405" resizable="false">
+            <h:form>
+                <p:growl id="growl" sticky="true" showDetail="true"/>
+                <p:wizard flowListener="#{personasControlador.onFlowProcess}" nextLabel="Siguiente" backLabel="Anterior">                    
+                    <p:tab id="infPersonal" title="Informacion Personal">
+                        <p:panel header="Informacion Personal" style="height: 200px;">
+                            <h:panelGrid columns="3" columnClasses="grid,grid,grid">
+                                <h:panelGrid columns="2" columnClasses="label,value">
+                                    <h:outputText value="Cedula *" />
+                                    <p:inputText value="#{personasControlador.personas.cedula}"/>
+
+                                    <h:outputText value="Nombre *"/>
+                                    <p:inputText value="#{personasControlador.personas.nombres}"/>
+
+                                    <h:outputText value="Primer Apellido *"/>
+                                    <p:inputText value="#{personasControlador.personas.primerApellido}"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" columnClasses="label,value">
+                                    <h:outputText value="Segundo Apellido" />
+                                    <p:inputText value="#{personasControlador.personas.segundoApellido}"/>
+
+                                    <h:outputText value="Fecha Nacimiento *"/>
+                                    <p:calendar value="#{personasControlador.personas.fechaNacimiento}" navigator="true" pattern="dd/MMM/yyyy"/>
+
+                                    <h:outputText value="Genero *" />
+                                    <p:selectOneMenu value="#{personasControlador.personas.genero}" converter="#{generoConverter}">
+                                        <f:selectItem itemLabel="--Seleccione--"/>
+                                        <f:selectItems value="#{personasControlador.generos}" var="genero" itemLabel="#{genero.nombreGenero}" itemValue="#{genero}"/>
+                                    </p:selectOneMenu>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" columnClasses="label,value">
+                                    <h:outputText value="Estado Civil *"/>
+                                    <p:selectOneMenu value="#{personasControlador.personas.estadoCivil}" converter="#{estadoCivilConverter}">
+                                        <f:selectItem itemLabel="--Seleccione--"/>
+                                        <f:selectItems value="#{personasControlador.estadoCiviles}" var="ecivil" itemLabel="#{ecivil.nombreEstadoCivil}" itemValue="#{ecivil}"/>
+                                    </p:selectOneMenu>
+
+                                    <h:outputText value="Estado Persona *"/>
+                                    <p:selectOneMenu value="#{personasControlador.personas.estadoPersona}" converter="#{estadoPersonaConverter}">
+                                        <f:selectItem itemLabel="--Seleccione--"/> 
+                                        <f:selectItems value="#{personasControlador.estadoPersonas}" var="epersona" itemLabel="#{epersona.nombreEstadoPersonas}" itemValue="#{epersona}"/>
+                                    </p:selectOneMenu>
+
+                                    <h:outputText value="Ocupacion *"/>
+                                    <p:inputTextarea  rows="2" cols="25" value="#{personasControlador.personas.ocupacion}"/>
+                                </h:panelGrid>
+                                <p:commandButton value="Cancelar" immediate="true" oncomplete="PF('wdlgDatos').hide();"/>
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+
+                    <p:tab id="infContacto" title="Informacion Contacto" >
+                        <p:panel header="Informacion Contacto" style="height: 200px;">
+                            <h:panelGrid columns="3" columnClasses="grid,grid,grid">
+                                <h:panelGrid columns="2" columnClasses="label,value">
+                                    <h:outputText value="Telefono *"/>
+                                    <p:inputText value="#{personasControlador.personas.telefono}"/>
+
+                                    <h:outputText value="Correo *"/>
+                                    <p:inputText value="#{personasControlador.personas.correo}"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" columnClasses="label,value">
+                                    <h:outputText value="Celular"/>
+                                    <p:inputText value="#{personasControlador.personas.celular}"/>
+
+                                    <h:outputText value="Barrio *"/>
+                                    <p:selectOneMenu value="#{personasControlador.personas.barrio}" converter="#{barrioConverter}">
+                                        <f:selectItem itemLabel="--Seleccione--"/>
+                                        <f:selectItems value="#{personasControlador.barrios}" var="barrio" itemLabel="#{barrio.nombreBarrio}" itemValue="#{barrio}"/>
+                                    </p:selectOneMenu>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" columnClasses="label,value">
+                                    <h:outputText value="Direccion *"/>
+                                    <p:inputText value="#{personasControlador.personas.direccion}"/>
+                                </h:panelGrid>    
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+
+                    <p:tab id="infConexioin" title="Informacion Conexion">
+                        <p:panel header="Informacion Conexion" style="height: 200px;">
+                            <h:panelGrid columns="3" columnClasses="grid,grid,grid">
+                                <h:panelGrid columns="2" columnClasses="label,vlue">
+                                    <h:outputText value="Usuario *"/>
+                                    <p:inputText value="#{personasControlador.personas.usuario}"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" columnClasses="label,value">
+                                    <h:outputText value="Contraseña *"/>
+                                    <p:password value="#{personasControlador.personas.contraseña}"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" columnClasses="label,value">
+                                    <h:outputText value="Rol *"/>
+                                    <p:selectOneMenu value="#{personasControlador.personas.rol}" converter="#{rolConverter}">
+                                        <f:selectItem itemLabel="--Seleccione--"/>
+                                        <f:selectItems value="#{personasControlador.roles}" var="rol" itemLabel="#{rol.nombreRol}" itemValue="#{rol}"/>
+                                    </p:selectOneMenu>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+
+                    <p:tab id="infAdicional" title="Informacion Adicioinal">
+                        <p:panel header="Informacion Adicioinal" style="height: 200px;">
+                            <h:panelGrid columns="2" columnClasses="grid,grid">
+                                <h:panelGrid columns="2" columnClasses="label,value">
+                                    <h:outputText value="Nivel Educacion *"/>
+                                    <p:inputText value="#{personasControlador.personas.nivelEducacion}"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" columnClasses="label,value">
+                                    <h:outputText value="Referido *"/>
+                                    <p:selectOneMenu value="#{personasControlador.personas.referido}" converter="#{personaConverter}">
+                                        <f:selectItem itemLabel="--Seleccione--"/>
+                                        <f:selectItems value="#{personasControlador.listPersonas}" var="referido" itemLabel="#{referido.nombres}" itemValue="#{referido.cedula}"/>
+                                    </p:selectOneMenu>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+
+                    <p:tab id="infConfirmacion" title="Confirmacion">
+                        <p:panel header="Confirmacion">
+                            <h:panelGrid id="confirmacion" columns="3" columnClasses="grid,grid,grid">
+                                <h:panelGrid columns="2" columnClasses="label,value">
+                                    <h:outputText value="Cedula *" />
+                                    <h:outputText value="#{personasControlador.personas.cedula}" styleClass="outputLabel"/>
+
+                                    <h:outputText value="Nombre *"/>
+                                    <h:outputText value="#{personasControlador.personas.nombres}" styleClass="outputLabel"/>
+
+                                    <h:outputText value="Primer Apellido *"/>
+                                    <h:outputText value="#{personasControlador.personas.primerApellido}" styleClass="outputLabel"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" columnClasses="label,value">
+                                    <h:outputText value="Segundo Apellido" />
+                                    <h:outputText value="#{personasControlador.personas.segundoApellido}" styleClass="outputLabel"/>
+
+                                    <h:outputText value="Fecha Nacimiento *"/>
+                                    <h:outputText value="#{personasControlador.personas.fechaNacimiento}" styleClass="outputLabel"/>
+
+                                    <h:outputText value="Genero" />
+                                    <h:outputText value="#{personasControlador.personas.genero.nombreGenero}" styleClass="outputLabel"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" columnClasses="label,value">
+                                    <h:outputText value="Estado Civil *"/>
+                                    <h:outputText value="#{personasControlador.personas.estadoCivil.nombreEstadoCivil}" styleClass="outputLabel"/>
+
+                                    <h:outputText value="Estado Persona *"/>
+                                    <h:outputText value="#{personasControlador.personas.estadoPersona.nombreEstadoPersonas}" styleClass="outputLabel"/>
+
+                                    <h:outputText value="Ocupacion *"/>
+                                    <h:outputText value="#{personasControlador.personas.ocupacion}" styleClass="outputLabel"/>
+                                </h:panelGrid>
+
+
+                                <h:panelGrid columns="2" columnClasses="label,value">
+                                    <h:outputText value="Telefono *"/>
+                                    <h:outputText value="#{personasControlador.personas.telefono}" styleClass="outputLabel"/>
+
+                                    <h:outputText value="Correo *"/>
+                                    <h:outputText value="#{personasControlador.personas.correo}" styleClass="outputLabel"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" columnClasses="label,value">
+                                    <h:outputText value="Celular *"/>
+                                    <h:outputText value="#{personasControlador.personas.celular}" styleClass="outputLabel"/>
+
+                                    <h:outputText value="Barrio *"/>
+                                    <h:outputText value="#{personasControlador.personas.barrio.nombreBarrio}" styleClass="outputLabel"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" columnClasses="label,value">
+                                    <h:outputText value="Direccion "/>
+                                    <h:outputText value="#{personasControlador.personas.direccion}" styleClass="outputLabel"/>
+                                </h:panelGrid>  
+
+
+                                <h:panelGrid columns="2" columnClasses="label,vlue">
+                                    <h:outputText value="Usuario *"/>
+                                    <h:outputText value="#{personasControlador.personas.usuario}" styleClass="outputLabel"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" columnClasses="label,value">
+                                    <h:outputText value="Contraseña *"/>
+                                    <h:outputText value="#{personasControlador.personas.contraseña}" styleClass="outputLabel"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" columnClasses="label,value">
+                                    <h:outputText value="Rol *"/>
+                                    <h:outputText value="#{personasControlador.personas.rol.nombreRol}" styleClass="outputLabel"/>
+                                </h:panelGrid>
+
+
+                                <h:panelGrid columns="2" columnClasses="label,value">
+                                    <h:outputText value="Nivel Educacion *"/>
+                                    <h:outputText value="#{personasControlador.personas.nivelEducacion}" styleClass="outputLabel"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" columnClasses="label,value">
+                                    <h:outputText value="Referido *"/>
+                                    <h:outputText value="#{personasControlador.personas.referido.nombres}" styleClass="outputLabel"/>
+                                </h:panelGrid>
+                            </h:panelGrid>
+
+                            <p:commandButton value="Guardar Registro" actionListener="#{personasControlador.guardarPersonas()}" oncomplete="PF('wdlgDatos').hide();" update=":ftabla:tabla"/>
+                        </p:panel>
+                    </p:tab>
+                </p:wizard>
+            </h:form>
+        </p:dialog>
+        <p:dialog header="Modificar Registro" widgetVar="wdlgDatos2" id="mdatos" modal="true" width="955" height="405" resizable="false">
+            <h:form>
+                <p:growl id="growl" sticky="true" showDetail="true"/>
+                <p:wizard flowListener="#{personasControlador.onFlowProcess}" nextLabel="Siguiente" backLabel="Anterior">                    
+                    <p:tab id="infPersonal2" title="Informacion Personal">
+                        <p:panel header="Informacion Personal" style="height: 200px;">
+                            <h:panelGrid columns="3" columnClasses="grid,grid,grid">
+                                <h:panelGrid columns="2" columnClasses="label,value">
+                                    <h:outputText value="Cedula *" />
+                                    <p:inputText value="#{personasControlador.personas.cedula}"/>
+
+                                    <h:outputText value="Nombre *"/>
+                                    <p:inputText value="#{personasControlador.personas.nombres}"/>
+
+                                    <h:outputText value="Primer Apellido *"/>
+                                    <p:inputText value="#{personasControlador.personas.primerApellido}"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" columnClasses="label,value">
+                                    <h:outputText value="Segundo Apellido" />
+                                    <p:inputText value="#{personasControlador.personas.segundoApellido}"/>
+
+                                    <h:outputText value="Fecha Nacimiento *"/>
+                                    <p:calendar value="#{personasControlador.personas.fechaNacimiento}"/>
+
+                                    <h:outputText value="Genero *" />
+                                    <p:selectOneMenu value="#{personasControlador.personas.genero}" converter="#{generoConverter}">
+                                        <f:selectItem itemLabel="--Seleccione--"/>
+                                        <f:selectItems value="#{personasControlador.generos}" var="genero" itemLabel="#{genero.nombreGenero}" itemValue="#{genero}"/>
+                                    </p:selectOneMenu>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" columnClasses="label,value">
+                                    <h:outputText value="Estado Civil *"/>
+                                    <p:selectOneMenu value="#{personasControlador.personas.estadoCivil}" converter="#{estadoCivilConverter}">
+                                        <f:selectItem itemLabel="--Seleccione--"/>
+                                        <f:selectItems value="#{personasControlador.estadoCiviles}" var="ecivil" itemLabel="#{ecivil.nombreEstadoCivil}" itemValue="#{ecivil}"/>
+                                    </p:selectOneMenu>
+
+                                    <h:outputText value="Estado Persona *"/>
+                                    <p:selectOneMenu value="#{personasControlador.personas.estadoPersona}" converter="#{estadoPersonaConverter}">
+                                        <f:selectItem itemLabel="--Seleccione--"/> 
+                                        <f:selectItems value="#{personasControlador.estadoPersonas}" var="epersona" itemLabel="#{epersona.nombreEstadoPersonas}" itemValue="#{epersona}"/>
+                                    </p:selectOneMenu>
+
+                                    <h:outputText value="Ocupacion *"/>
+                                    <p:inputTextarea  rows="2" cols="25" value="#{personasControlador.personas.ocupacion}"/>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+
+                    <p:tab id="infContacto2" title="Informacion Contacto">
+                        <p:panel header="Informacion Contacto" style="height: 200px;">
+                            <h:panelGrid columns="3" columnClasses="grid,grid,grid">
+                                <h:panelGrid columns="2" columnClasses="label,value">
+                                    <h:outputText value="Telefono *"/>
+                                    <p:inputText value="#{personasControlador.personas.telefono}"/>
+
+                                    <h:outputText value="Correo *"/>
+                                    <p:inputText value="#{personasControlador.personas.correo}"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" columnClasses="label,value">
+                                    <h:outputText value="Celular"/>
+                                    <p:inputText value="#{personasControlador.personas.celular}"/>
+
+                                    <h:outputText value="Barrio *"/>
+                                    <p:selectOneMenu value="#{personasControlador.personas.barrio}" converter="#{barrioConverter}">
+                                        <f:selectItem itemLabel="--Seleccione--"/>
+                                        <f:selectItems value="#{personasControlador.barrios}" var="barrio" itemLabel="#{barrio.nombreBarrio}" itemValue="#{barrio}"/>
+                                    </p:selectOneMenu>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" columnClasses="label,value" style="margin-top: -30px;">
+                                    <h:outputText value="Direccion *"/>
+                                    <p:inputText value="#{personasControlador.personas.direccion}"/>
+                                </h:panelGrid>    
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+
+                    <p:tab id="infConexioin2" title="Informacion Conexion">
+                        <p:panel header="Informacion Conexion" style="height: 200px;">
+                            <h:panelGrid columns="3" columnClasses="grid,grid,grid">
+                                <h:panelGrid columns="2" columnClasses="label,vlue">
+                                    <h:outputText value="Usuario *"/>
+                                    <p:inputText value="#{personasControlador.personas.usuario}"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" columnClasses="label,value">
+                                    <h:outputText value="Contraseña *"/>
+                                    <p:inputText value="#{personasControlador.personas.contraseña}"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" columnClasses="label,value">
+                                    <h:outputText value="Rol *"/>
+                                    <p:selectOneMenu value="#{personasControlador.personas.rol}" converter="#{rolConverter}">
+                                        <f:selectItem itemLabel="--Seleccione--"/>
+                                        <f:selectItems value="#{personasControlador.roles}" var="rol" itemLabel="#{rol.nombreRol}" itemValue="#{rol}"/>
+                                    </p:selectOneMenu>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+
+                    <p:tab id="infAdicional2" title="Informacion Adicioinal">
+                        <p:panel header="Informacion Adicioinal" style="height: 200px;">
+                            <h:panelGrid columns="2" columnClasses="grid,grid">
+                                <h:panelGrid columns="2" columnClasses="label,value">
+                                    <h:outputText value="Nivel Educacion *"/>
+                                    <p:inputText value="#{personasControlador.personas.nivelEducacion}"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" columnClasses="label,value">
+                                    <h:outputText value="Referido *"/>
+                                    <p:selectOneMenu value="#{personasControlador.personas.referido}" converter="#{personaConverter}">
+                                        <f:selectItem itemLabel="--Seleccione--"/>
+                                        <f:selectItems value="#{personasControlador.listPersonas}" var="referido" itemLabel="#{referido.nombres}" itemValue="#{referido}"/>
+                                    </p:selectOneMenu>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+
+                    <p:tab id="infConfirmacion2" title="Confirmacion">
+                        <p:panel header="Confirmacion">
+                            <h:panelGrid id="confirmacion" columns="3" columnClasses="grid,grid,grid">
+                                <h:panelGrid columns="2" columnClasses="label,value">
+                                    <h:outputText value="Cedula " />
+                                    <h:outputText value="#{personasControlador.personas.cedula}" styleClass="outputLabel"/>
+
+                                    <h:outputText value="Nombre"/>
+                                    <h:outputText value="#{personasControlador.personas.nombres}" styleClass="outputLabel"/>
+
+                                    <h:outputText value="Primer Apellido"/>
+                                    <h:outputText value="#{personasControlador.personas.primerApellido}" styleClass="outputLabel"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" columnClasses="label,value">
+                                    <h:outputText value="Segundo Apellido" />
+                                    <h:outputText value="#{personasControlador.personas.segundoApellido}" styleClass="outputLabel"/>
+
+                                    <h:outputText value="Fecha Nacimiento"/>
+                                    <h:outputText value="#{personasControlador.personas.fechaNacimiento}" styleClass="outputLabel"/>
+
+                                    <h:outputText value="Genero" />
+                                    <h:outputText value="#{personasControlador.personas.genero.nombreGenero}" styleClass="outputLabel"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" columnClasses="label,value">
+                                    <h:outputText value="Estado Civil"/>
+                                    <h:outputText value="#{personasControlador.personas.estadoCivil.nombreEstadoCivil}" styleClass="outputLabel"/>
+
+                                    <h:outputText value="Estado Persona"/>
+                                    <h:outputText value="#{personasControlador.personas.estadoPersona.nombreEstadoPersonas}" styleClass="outputLabel"/>
+
+                                    <h:outputText value="Ocupacion"/>
+                                    <h:outputText value="#{personasControlador.personas.ocupacion}" styleClass="outputLabel"/>
+
+
+                                </h:panelGrid>
+
+
+                                <h:panelGrid columns="2" columnClasses="label,value">
+                                    <h:outputText value="Telefono"/>
+                                    <h:outputText value="#{personasControlador.personas.telefono}" styleClass="outputLabel"/>
+
+                                    <h:outputText value="Correo"/>
+                                    <h:outputText value="#{personasControlador.personas.correo}" styleClass="outputLabel"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" columnClasses="label,value">
+                                    <h:outputText value="Celular"/>
+                                    <h:outputText value="#{personasControlador.personas.celular}" styleClass="outputLabel"/>
+
+                                    <h:outputText value="Barrio"/>
+                                    <h:outputText value="#{personasControlador.personas.barrio.nombreBarrio}" styleClass="outputLabel"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" columnClasses="label,value">
+                                    <h:outputText value="Direccion"/>
+                                    <h:outputText value="#{personasControlador.personas.direccion}" styleClass="outputLabel"/>
+                                </h:panelGrid>  
+
+
+                                <h:panelGrid columns="2" columnClasses="label,vlue">
+                                    <h:outputText value="Usuario"/>
+                                    <h:outputText value="#{personasControlador.personas.usuario}" styleClass="outputLabel"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" columnClasses="label,value">
+                                    <h:outputText value="Contraseña"/>
+                                    <h:outputText value="#{personasControlador.personas.contraseña}" styleClass="outputLabel"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" columnClasses="label,value">
+                                    <h:outputText value="Rol"/>
+                                    <h:outputText value="#{personasControlador.personas.rol.nombreRol}" styleClass="outputLabel"/>
+                                </h:panelGrid>
+
+
+                                <h:panelGrid columns="2" columnClasses="label,value">
+                                    <h:outputText value="Nivel Educacion"/>
+                                    <h:outputText value="#{personasControlador.personas.nivelEducacion}" styleClass="outputLabel"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" columnClasses="label,value">
+                                    <h:outputText value="Referido"/>
+                                    <h:outputText value="#{personasControlador.personas.referido.nombres}" styleClass="outputLabel"/>
+                                </h:panelGrid>
+                            </h:panelGrid>
+
+                            <p:commandButton value="Guardar Registro" actionListener="#{personasControlador.modificarPersona(personasControlador.personas)}" oncomplete="PF('wdlgDatos2').hide();" update=":ftabla:tabla"/>
+                        </p:panel>
+                    </p:tab>
+                </p:wizard>
+            </h:form>
+        </p:dialog>
+    </h:body>
+</html>
+

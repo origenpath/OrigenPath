@@ -1,0 +1,153 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Kit</title>
+        <h:outputStylesheet library="css" name="reset.css"/>
+        <h:outputStylesheet library="css" name="barrio.css" />
+        <h:outputStylesheet library="css" name="personas.css"/>
+    </h:head>
+    <h:body>
+        <ui:include src="../template.xhtml"/>
+        <h:form>
+            <h1>Administracion Kits</h1>
+            <p:growl id="messages" showDetail="true" autoUpdate="true" life="3000"/>
+
+            <p:fieldset legend="Información Kit">
+                <h:panelGrid columns="2" columnClasses="label,value">
+                    <p:outputLabel for="codigokit:" value="Código Kit: " />
+                    <p:inputText id="codigokit" value="#{kitControlador.kit.idKits}"/>
+                    <p:outputLabel for="nombrekit:" value=" Nombre Kit: "/>
+                    <p:inputText id="nombrekit" value="#{kitControlador.kit.nombreKit}"/>
+                </h:panelGrid>
+                <p:outputLabel value=" Productos: " />
+                <h:panelGroup>
+                    <p:autoComplete value="#{kitControlador.pro}" completeMethod="#{kitControlador.completeStrin}" 
+                                    var="pr" itemLabel="#{pr.nombreProducto}" itemValue="#{pr}"
+                                    converter="#{productosConverter}">
+                        <p:column headerText="Código">
+                            <h:outputText value="#{pr.referenciaProducto}"/>
+                        </p:column>
+                        <p:column headerText="Nombre">
+                            <h:outputText value="#{pr.nombreProducto}"/>
+                        </p:column>
+                        <p:column headerText="Cantidad">
+                            <h:outputText value="#{pr.cantidadProducto}"/>
+                        </p:column>
+                    </p:autoComplete>
+                    <p:outputLabel class="lblcantidad" value="Cant: "/>
+                    <p:inputText class="cantidad" value="#{kitControlador.detalleKit.cantidadProducto}"/>
+                    <p:commandButton class="agregar" value="Agregar" actionListener="#{kitControlador.agregar()}" update="detalle"/>
+                </h:panelGroup>
+                <br/>
+                <br/>
+                <p:dataTable id="detalle" value="#{kitControlador.listaDetalle}" var="detalle" editable="true">
+                    <f:facet name="header">
+                        Detalle Del Kit
+                    </f:facet>
+                    <p:ajax event="rowEdit" listener="#{kitControlador.onRowEdit}" />
+                    <p:ajax event="rowEditCancel" listener="#{kitControlador.onRowCancel}" />
+                    <p:column headerText="Cod Kit">
+                        <p:outputLabel value="#{detalle.referenciaProducto.referenciaProducto}"/>
+                    </p:column>
+
+                    <p:column headerText="Productos">
+                        <p:outputLabel value="#{detalle.referenciaProducto.nombreProducto}"/>
+                    </p:column>
+                    <p:column headerText="Cantidad">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{detalle.cantidadProducto}"/></f:facet>
+                            <f:facet name="input"><p:inputText value="#{detalle.cantidadProducto}"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+                    <p:column style="width: 40px">
+                        <p:rowEditor/>
+                    </p:column>
+                </p:dataTable>
+            </p:fieldset>
+            <br/>
+            <p:commandButton value="Guardar Registro" actionListener="#{kitControlador.guardarKit()}" update=":tabla:data"/>
+        </h:form>
+        <br/>
+        <h:form id="tabla">
+            <p:dataTable id="data" var="k" value="#{kitControlador.kits}">
+                <p:column headerText="Código Kit">
+                    <h:outputText value="#{k.idKits}"/>
+                </p:column>                
+                <p:column headerText="Nombre Kit">
+                    <h:outputText value="#{k.nombreKit}"/>
+                </p:column>
+                <p:column style="width: 15px;">
+                    <p:commandLink actionListener="#{kitControlador.buscarKit(k.idKits)}" oncomplete="PF('wdlgDatos').show();" update=":dlgDatos" styleClass="ui-icon ui-icon-pencil"/>
+                </p:column>
+                <p:column style="width: 15px;">                    
+                    <p:commandLink actionListener="#{kitControlador.eliminarKit(k.idKits)}" update="data" styleClass="ui-icon ui-icon-trash"/>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+        <p:dialog header="Modifcar Registro" widgetVar="wdlgDatos" id="dlgDatos" modal="true">
+            <h:form>
+                <p:fieldset legend="Información Kit">
+                    <h:panelGrid columns="2" columnClasses="label,value">
+                        <p:outputLabel for="codigokit:" value="Código Kit: " />
+                        <p:inputText id="codigokit" value="#{kitControlador.kit.idKits}"/>
+                        <p:outputLabel for="nombrekit:" value=" Nombre Kit: "/>
+                        <p:inputText id="nombrekit" value="#{kitControlador.kit.nombreKit}"/>
+                    </h:panelGrid>
+                    <p:outputLabel value=" Productos: " />
+                    <h:panelGroup>
+                        <p:autoComplete value="#{kitControlador.pro}" completeMethod="#{kitControlador.completeStrin}" 
+                                        var="pr" itemLabel="#{pr.nombreProducto}" itemValue="#{pr}"
+                                        converter="#{productosConverter}">
+                            <p:column headerText="Código">
+                                <h:outputText value="#{pr.referenciaProducto}"/>
+                            </p:column>
+                            <p:column headerText="Nombre">
+                                <h:outputText value="#{pr.nombreProducto}"/>
+                            </p:column>
+                            <p:column headerText="Cantidad">
+                                <h:outputText value="#{pr.cantidadProducto}"/>
+                            </p:column>
+                        </p:autoComplete>
+                        <p:outputLabel class="lblcantidad" value="Cant: "/>
+                        <p:inputText class="cantidad" value="#{kitControlador.detalleKit.cantidadProducto}"/>
+                        <p:commandButton class="agregar" value="Agregar" actionListener="#{kitControlador.agregar()}" update="detalle"/>
+                    </h:panelGroup>
+                    <br/>
+                    <br/>
+                    <p:dataTable id="detalle" value="#{kitControlador.listaDetalle}" var="detalle" editable="true">
+                        <f:facet name="header">
+                            Detalle Del Kit
+                        </f:facet>
+                        <p:ajax event="rowEdit" listener="#{kitControlador.onRowEdit}" />
+                        <p:ajax event="rowEditCancel" listener="#{kitControlador.onRowCancel}" />
+                        <p:column headerText="Cod Kit">
+                            <p:outputLabel value="#{detalle.referenciaProducto.referenciaProducto}"/>
+                        </p:column>
+                        <p:column headerText="Productos">
+                            <p:outputLabel value="#{detalle.referenciaProducto.nombreProducto}"/>
+                        </p:column>
+                        <p:column headerText="Cantidad">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{detalle.cantidadProducto}"/></f:facet>
+                                <f:facet name="input"><p:inputText value="#{detalle.cantidadProducto}"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column style="width: 40px">
+                            <p:rowEditor/>
+                        </p:column>
+                    </p:dataTable>
+                </p:fieldset>
+                
+                <br/>
+                <p:commandButton value="Guardar" actionListener="#{kitControlador.editarKit(kitControlador.kit)}" oncomplete="PF('wdlgDatos').hide();"  update=":tabla:data"/>
+                <p:commandButton value="Cancelar" immediate="true" oncomplete="PF('wdlgDatos').hide();"/>
+            </h:form>
+        </p:dialog>
+    </h:body>
+</html>
+

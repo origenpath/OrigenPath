@@ -1,0 +1,189 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>Productos</title>
+        <h:outputStylesheet library="css" name="barrio.css" />
+        <h:outputStylesheet library="css" name="personas.css"/>
+    </h:head>
+    <h:body>
+        <ui:include src="../template.xhtml"/>
+        <h:form enctype="multipart/form-data">
+            <h1>Administrar Productos</h1>
+            <p:growl id="messages" autoUpdate="true" life="4000"/>
+            <p:fieldset legend="Informacion General">
+                <h:panelGrid columns="2" columnClasses="grid,grid">
+                    <h:panelGrid columns="2" columnClasses="label,value" style="margin-top: -30px">
+                        <h:outputText value="Referencia Producto"/>
+                        <p:inputText value="#{productoCotrolador.productos.referenciaProducto}"/>
+                        <h:outputText value="Nombre Producto"/>
+                        <p:inputText value="#{productoCotrolador.productos.nombreProducto}"/>                    
+                        <h:outputText value="Cantidad Producto"/>
+                        <p:inputText value="#{productoCotrolador.productos.cantidadProducto}"/>
+                        <h:outputText value="Precio Compra"/>
+                        <p:inputText value="#{productoCotrolador.productos.precioCompra}"/>                        
+                        <h:outputText value="Precio Venta"/>
+                        <p:inputText value="#{productoCotrolador.productos.precioVenta}"/>                        
+                        <h:outputText value="Gramage"/>
+                        <p:inputText value="#{productoCotrolador.productos.gramos}"/>                        
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" columnClasses="label,value">
+                        <h:outputText value="Tipo Producto"/>
+                        <p:selectOneMenu value="#{productoCotrolador.productos.tipoProducto}" converter="#{tipoProductoConverter}">
+                            <f:selectItem itemLabel="--Seleccione--"/>
+                            <f:selectItems value="#{productoCotrolador.tipoProductos}" var="tproducto" itemLabel="#{tproducto.nombreTipoProducto}" itemValue="#{tproducto}"/>
+                        </p:selectOneMenu>
+                        <h:outputText value="Estado Producto"/>
+                        <p:selectOneMenu value="#{productoCotrolador.productos.estadoProducto}" converter="#{estadoProductoConverter}">
+                            <f:selectItem itemLabel="--Seleccione--"/>
+                            <f:selectItems value="#{productoCotrolador.estadoProductos}" var="eproductos" itemLabel="#{eproductos.nombreEstadoProducto}" itemValue="#{eproductos}"/>
+                        </p:selectOneMenu>
+                        <h:outputText value="Proveedor Producto"/>
+                        <p:selectOneMenu value="#{productoCotrolador.productos.proveedor}" converter="#{proveedorConverter}">
+                            <f:selectItem itemLabel="--Seleccione--"/>
+                            <f:selectItems value="#{productoCotrolador.proveedores}" var="proveedores" itemLabel="#{proveedores.nombreEmpresa}" itemValue="#{proveedores}"/>
+                        </p:selectOneMenu>
+                        <h:outputText value="Imagen Producto"/>
+                        <h:panelGroup>
+                            <p:fileUpload id="fildImgProd" mode="advanced" 
+                                          fileUploadListener="#{productoCotrolador.subirImagen}"
+                                          sizeLimit="1000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+                                          cancelLabel="Cancelar" uploadLabel="Subir" label="Elegir"
+                                          update="graphImgProd"/>
+                            <p:graphicImage id="graphImgProd" value="#{productoCotrolador.imagenProducto}"/>
+                        </h:panelGroup>
+                        <h:outputText value="Descripción"/>
+                        <p:inputTextarea  rows="2" cols="25" value="#{productoCotrolador.productos.descripcion}"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:fieldset>
+            <br/>
+            <p:commandButton value="Guardar Producto" actionListener="#{productoCotrolador.guardarProducto()}"/>
+        </h:form>
+        <br/>
+        <h:form id="tabla">
+            <p:dataTable id="data" var="pro" value="#{productoCotrolador.listProductos}">
+                <p:column style="width:15px">
+                    <p:rowToggler />
+                </p:column>
+                <p:column headerText="Referencia Producto">
+                    <h:outputText value="#{pro.referenciaProducto}"/>
+                </p:column>
+                <p:column headerText="Nombre Producto">
+                    <h:outputText value="#{pro.nombreProducto}"/>
+                </p:column>
+                <p:column headerText="Cantidad Producto">
+                    <h:outputText value="#{pro.cantidadProducto}"/>
+                </p:column>
+                <p:column headerText="Precio Producto">
+                    <h:outputText value="#{pro.precioVenta}"/>
+                </p:column>
+                <p:column style="width: 20px">
+                    <p:commandLink actionListener="#{productoCotrolador.buscarProducto(pro.referenciaProducto)}" oncomplete="PF('wdlgDatos').show();" update=":dlgDatos" styleClass="ui-icon ui-icon-pencil"/>
+                </p:column>
+                <p:column style="width: 20px">
+                    <p:commandLink actionListener="#{productoCotrolador.eliminarProducto(pro.referenciaProducto)}" update="data" styleClass="ui-icon ui-icon-trash"/>
+                </p:column>
+                <p:rowExpansion>
+                    <p:panelGrid columns="2" columnClasses="label,value" style="width:370px">
+                        <f:facet name="header">
+                            <p:graphicImage >
+                                
+                            </p:graphicImage>
+                        </f:facet>
+                        <h:outputText value="Referencia Producto"/>
+                        <h:outputText value="#{pro.referenciaProducto}"/>
+
+                        <h:outputText value="Nombre Producto"/>
+                        <h:outputText value="#{pro.nombreProducto}"/>
+
+                        <h:outputText value="Cantidad Producto"/>
+                        <h:outputText value="#{pro.cantidadProducto}"/>
+
+                        <h:outputText value="Precio Compra"/>
+                        <h:outputText value="#{pro.precioCompra}"/>
+                        
+                        <h:outputText value="Precio Venta"/>
+                        <h:outputText value="#{pro.precioVenta}"/>
+                        
+                        <h:outputText value="Gramaje"/>
+                        <h:outputText value="#{pro.gramos}"/>
+                        
+                        <h:outputText value="Descripcion"/>
+                        <h:outputText value="#{pro.descripcion}"/>
+
+                        <h:outputText value="Tipo Producto"/>
+                        <h:outputText value="#{pro.tipoProducto.nombreTipoProducto}"/>
+
+                        <h:outputText value="Estado Producto"/>
+                        <h:outputText value="#{pro.estadoProducto.nombreEstadoProducto}"/>
+
+                        <h:outputText value="Proveedor Producto"/>
+                        <h:outputText value="#{pro.proveedor.nombreEmpresa}"/>
+                        
+                    </p:panelGrid>
+                </p:rowExpansion>
+            </p:dataTable>
+        </h:form>
+        <p:dialog widgetVar="wdlgDatos" id="dlgDatos" modal="true">
+            <h:form enctype="multipart/form-data">
+            <h1>Administrar Productos</h1>
+            <p:growl id="messages" autoUpdate="true" life="4000"/>
+            <p:fieldset legend="Informacion General">
+                <h:panelGrid columns="2" columnClasses="grid,grid">
+                    <h:panelGrid columns="2" columnClasses="label,value" style="margin-top: -30px">
+                        <h:outputText value="Referencia Producto"/>
+                        <p:inputText value="#{productoCotrolador.productos.referenciaProducto}"/>
+                        <h:outputText value="Nombre Producto"/>
+                        <p:inputText value="#{productoCotrolador.productos.nombreProducto}"/>                    
+                        <h:outputText value="Cantidad Producto"/>
+                        <p:inputText value="#{productoCotrolador.productos.cantidadProducto}"/>
+                        <h:outputText value="Precio Compra"/>
+                        <p:inputText value="#{productoCotrolador.productos.precioCompra}"/>                        
+                        <h:outputText value="Precio Venta"/>
+                        <p:inputText value="#{productoCotrolador.productos.precioVenta}"/>                        
+                        <h:outputText value="Gramage"/>
+                        <p:inputText value="#{productoCotrolador.productos.gramos}"/>                        
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" columnClasses="label,value">
+                        <h:outputText value="Tipo Producto"/>
+                        <p:selectOneMenu value="#{productoCotrolador.productos.tipoProducto}" converter="#{tipoProductoConverter}">
+                            <f:selectItem itemLabel="--Seleccione--"/>
+                            <f:selectItems value="#{productoCotrolador.tipoProductos}" var="tproducto" itemLabel="#{tproducto.nombreTipoProducto}" itemValue="#{tproducto}"/>
+                        </p:selectOneMenu>
+                        <h:outputText value="Estado Producto"/>
+                        <p:selectOneMenu value="#{productoCotrolador.productos.estadoProducto}" converter="#{estadoProductoConverter}">
+                            <f:selectItem itemLabel="--Seleccione--"/>
+                            <f:selectItems value="#{productoCotrolador.estadoProductos}" var="eproductos" itemLabel="#{eproductos.nombreEstadoProducto}" itemValue="#{eproductos}"/>
+                        </p:selectOneMenu>
+                        <h:outputText value="Proveedor Producto"/>
+                        <p:selectOneMenu value="#{productoCotrolador.productos.proveedor}" converter="#{proveedorConverter}">
+                            <f:selectItem itemLabel="--Seleccione--"/>
+                            <f:selectItems value="#{productoCotrolador.proveedores}" var="proveedores" itemLabel="#{proveedores.nombreEmpresa}" itemValue="#{proveedores}"/>
+                        </p:selectOneMenu>
+                        <h:outputText value="Imagen Producto"/>
+                        <h:panelGroup>
+                            <p:fileUpload id="fildImgProd" mode="advanced" 
+                                          fileUploadListener="#{productoCotrolador.subirImagen}"
+                                          sizeLimit="1000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+                                          cancelLabel="Cancelar" uploadLabel="Subir" label="Elegir"
+                                          update="graphImgProd"/>
+                            <p:graphicImage id="graphImgProd" value="#{productoCotrolador.imagenProducto}"/>
+                        </h:panelGroup>
+                        <h:outputText value="Descripción"/>
+                        <p:inputTextarea  rows="2" cols="25" value="#{productoCotrolador.productos.descripcion}"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:fieldset>
+            <br/>
+            <p:commandButton value="Modificar Producto" actionListener="#{productoCotrolador.modificarProducto(productoCotrolador.productos)}"/>
+             <p:commandButton value="Cancelar" immediate="true" oncomplete="PF('wdlgDatos').hide();"/>
+        </h:form>      
+        </p:dialog>
+    </h:body>
+</html>
+

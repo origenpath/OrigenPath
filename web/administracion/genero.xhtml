@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>Genero</title>
+        <h:outputStylesheet library="css" name="barrio.css" />
+        <h:outputStylesheet library="css" name="personas.css"/>
+    </h:head>
+    <h:body>
+        <ui:include src="../template.xhtml" />
+        <h:form id="fgenero">
+            <h1>Administrar Genero</h1>
+            <p:growl id="messages" autoUpdate="true" life="4000"/>
+            <p:fieldset legend="Información General">                
+                <h:panelGrid columns="2">
+                    <p:outputLabel for="codigog" value="Código Genero"/>
+                    <p:inputText id="codigog" value="#{generoControlador.genero.idGenero}" disabled="true"/>
+
+                    <p:outputLabel for="nombreg" value="Nombre Genero"/>                    
+                    <p:inputText id="nombreg" value="#{generoControlador.genero.nombreGenero}" required="true"
+                                  requiredMessage="Este campo es obligatorio debe llenarlo"/>
+                </h:panelGrid>
+            </p:fieldset>
+            <br/>
+            <p:commandButton value="Guardar" actionListener="#{generoControlador.guardarGenero()}" update=":ftabla:data,fgenero"/>
+        </h:form>
+
+        <br/>
+        <br/>
+        <h:form id="ftabla">
+            <p:dataTable var="g" id="data" value="#{generoControlador.listarGenero()}">
+                <p:column headerText="Código Genero">
+                    <h:outputText value="#{g.idGenero}"/>
+                </p:column>
+                <p:column headerText="Nombre Genero">
+                    <h:outputText value="#{g.nombreGenero}"/>
+                </p:column>
+                <p:column style="width: 30px">
+                    <p:commandLink  actionListener="#{generoControlador.buscarGenero(g.idGenero)}" oncomplete="PF('wdlgDatos').show();" update=":dlgDatos" styleClass="ui-icon ui-icon-pencil"/> 
+                    <p:commandLink actionListener="#{generoControlador.eliminarGenero(g.idGenero)}" update="data" styleClass="ui-icon ui-icon-trash"/>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+
+        <p:dialog header="Modificar" widgetVar="wdlgDatos" id="dlgDatos">
+            <h:form>
+                <h:panelGrid>
+                    <p:outputLabel  value="Código Genero"/>
+                    <p:inputText  value="#{generoControlador.genero.idGenero}"/>
+
+                    <p:outputLabel  value="Nombre Genero"/>                    
+                    <p:inputText  value="#{generoControlador.genero.nombreGenero}"/>
+
+                </h:panelGrid>
+                <br/>
+                <p:commandButton value="Modificar" actionListener="#{generoControlador.editarGenero(generoControlador.genero)}" oncomplete="PF('wdlgDatos').hide();" update=":ftabla:data"/>
+                <p:commandButton value="Cancelar"  immediate="true" oncomplete="PF('wdlgDatos').hide();"/>
+            </h:form>
+        </p:dialog>
+    </h:body>
+</html>
+

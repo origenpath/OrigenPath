@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>Estado Producto</title>
+        <h:outputStylesheet library="css" name="barrio.css" />
+    </h:head>
+    <h:body>
+        <ui:include src="../template.xhtml"/>
+        <h:form id="festprod">
+            <p:growl id="messages" autoUpdate="true" life="4000"/>
+            <h1>Administrar Estado Producto</h1>
+            <p:fieldset legend="Información General">
+                <h:panelGrid columns="2">
+                    <p:outputLabel for="codigo" value="Código estado producto "/>
+                    <p:inputText  id="codigo" value="#{estadoProductoControlador.estadoProducto.idEstadoProducto}" required="true"
+                                  requiredMessage="Este campo es obligatorio debe llenarlo"/>
+
+                    <p:outputLabel for="nombre" value="Nombre estado producto"/>                    
+                    <p:inputText id="nombre" value="#{estadoProductoControlador.estadoProducto.nombreEstadoProducto}" required="true"
+                                 requiredMessage="Este campo es obligatorio debe llenarlo"/>
+                </h:panelGrid>
+            </p:fieldset>
+            <br/>
+            <p:commandButton value="Guardar" actionListener="#{estadoProductoControlador.guardarEstadoProducto()}" update=":ftabla:data,festprod"/>
+        </h:form>
+        <h:form id="ftabla">
+            <br/>
+            <br/>
+            <p:dataTable var="b" id="data" value="#{estadoProductoControlador.listarEstadoProducto()}">
+                <p:column headerText="Código estado producto">
+                    <h:outputText value="#{b.idEstadoProducto}"/>
+                </p:column>
+                <p:column headerText="Nombre estado producto">
+                    <h:outputText value="#{b.nombreEstadoProducto}"/>
+                </p:column>
+                <p:column headerText="" style="width: 40px">
+                    <p:commandLink actionListener="#{estadoProductoControlador.buscarEstadoProducto(b.idEstadoProducto)}" oncomplete="PF('wdlgDatos').show();" update=":dlgDatos" styleClass="ui-icon ui-icon-pencil"/> 
+                    <p:commandLink  actionListener="#{estadoProductoControlador.eliminarEstadoProducto(b.idEstadoProducto)}" update="data" styleClass="ui-icon ui-icon-trash"/>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+        <p:dialog header="Modificar" widgetVar="wdlgDatos" id="dlgDatos">
+            <h:form>
+                <h:panelGrid >
+                    <p:outputLabel  value="Código estado producto"/>
+                    <p:inputText  value="#{estadoProductoControlador.estadoProducto.idEstadoProducto}"/>
+
+                    <p:outputLabel  value="Nombre estado producto"/>                    
+                    <p:inputText  value="#{estadoProductoControlador.estadoProducto.nombreEstadoProducto}"/>
+
+                </h:panelGrid>
+                <br/>
+                <p:commandButton value="Modificar" actionListener="#{estadoProductoControlador.editarEstadoProducto(estadoProductoControlador.estadoProducto)}" oncomplete="PF('wdlgDatos').hide();" update=":ftabla:data"/>
+                <p:commandButton value="Cancelar"  immediate="true" oncomplete="PF('wdlgDatos').hide();"/>
+            </h:form>
+        </p:dialog>
+    </h:body>
+</html>
+

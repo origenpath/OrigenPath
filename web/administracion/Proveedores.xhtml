@@ -1,0 +1,105 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>Proveedores</title>
+        <h:outputStylesheet library="css" name="barrio.css" />
+        <h:outputStylesheet library="css" name="personas.css"/>
+    </h:head>
+    <h:body>
+        <ui:include src="../template.xhtml"/>
+        <h:form id="fprov">
+            <h1>Administracion Proveedores</h1>
+            <p:growl id="messages" autoUpdate="true" life="3000"/>
+            <p:fieldset legend="Información General">
+                <h:panelGrid columns="2" columnClasses="grid,grid">
+                    <h:panelGrid columns="2" columnClasses="label,value">
+                        <h:outputText value="Codigo Proveedor"/>
+                        <p:inputText value="#{proveedoresControlador.proveedor.codigoProveedor}"/>
+                        <h:outputText value="Nit Proveedor"/>
+                        <p:inputText value="#{proveedoresControlador.proveedor.nitProveedor}"/>
+                        <h:outputText value="Nombre Empresa"/>
+                        <p:inputText value="#{proveedoresControlador.proveedor.nombreEmpresa}"/>
+                        <h:outputText value="Telefono"/>
+                        <p:inputText value="#{proveedoresControlador.proveedor.telefono}"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" columnClasses="label,grid" style="margin-top: -30px;">
+                        <h:outputText value="Extension"/>
+                        <p:inputText value="#{proveedoresControlador.proveedor.ext}"/>
+                        <h:outputText value="Dirección"/>
+                        <p:inputText value="#{proveedoresControlador.proveedor.direccion}"/>
+                        <h:outputText value="Estado"/>
+                        <p:selectOneMenu value="#{proveedoresControlador.proveedor.estadoProveedor}" converter="#{estadoProveedorConverter}">
+                            <f:selectItem itemLabel="--Seleccione--"/>
+                            <f:selectItems value="#{proveedoresControlador.estadoProveedores}" var="eproveedor" itemLabel="#{eproveedor.nombreEstadoProveedor}" itemValue="#{eproveedor}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:fieldset>
+            <br/>
+            <p:commandButton value="Guardar" actionListener="#{proveedoresControlador.guardarProveedor()}" update=":tabla:data"/>
+        </h:form>
+        <br/>
+        <h:form id="tabla">
+            <p:dataTable var="p" id="data" value="#{proveedoresControlador.proveedores}">
+                <p:column headerText="Codigo Proveedor">
+                    <h:outputText value="#{p.codigoProveedor}"/>    
+                </p:column>
+                <p:column headerText="Nit Proveedor">
+                    <h:outputText value="#{p.nitProveedor}"/>
+                </p:column>
+                <p:column headerText="Nombre Empresa">
+                    <h:outputText value="#{p.nombreEmpresa}"/>
+                </p:column>
+                <p:column headerText="Teléfono">
+                    <h:outputText value="#{p.telefono}"/>
+                </p:column>
+                <p:column headerText="Ext">
+                    <h:outputText value="#{p.ext}"/>
+                </p:column>
+                <p:column headerText="Direccion">
+                    <h:outputText value="#{p.direccion}"/>
+                </p:column>
+                <p:column headerText="Estado">
+                    <h:outputText value="#{p.estadoProveedor.nombreEstadoProveedor}"/>
+                </p:column>
+                <p:column style="width: 20px">
+                    <p:commandLink actionListener="#{proveedoresControlador.buscarProveedor(p.codigoProveedor)}" oncomplete="PF('wdlgDatos').show();" update=":dlgDatos" styleClass="ui-icon ui-icon-pencil"/> 
+                </p:column>
+                <p:column style="width: 20px">
+                    <p:commandLink actionListener="#{proveedoresControlador.eliminarProveedir(p.codigoProveedor)}" update="data" styleClass="ui-icon ui-icon-trash"/>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+        <p:dialog header="Modificar Informacion" widgetVar="wdlgDatos" id="dlgDatos" modal="true" showEffect="show" resizable="false">
+            <h:form>
+                <h:panelGrid columns="2" columnClasses="label,value">
+                    <p:outputLabel value="Codigo Proveedor"/>
+                    <p:inputText value="#{proveedoresControlador.proveedor.codigoProveedor}"/>
+                    <p:outputLabel value="Nit Proveedor"/>
+                    <p:inputText value="#{proveedoresControlador.proveedor.nitProveedor}"/>
+                    <p:outputLabel value="Nombre Empresa"/>
+                    <p:inputText value="#{proveedoresControlador.proveedor.nombreEmpresa}"/>
+                    <p:outputLabel value="Telefono"/>
+                    <p:inputText value="#{proveedoresControlador.proveedor.telefono}"/>
+                    <p:outputLabel value="Ext"/>
+                    <p:inputText value="#{proveedoresControlador.proveedor.ext}"/>
+                    <p:outputLabel value="Direccion"/>
+                    <p:inputText value="#{proveedoresControlador.proveedor.direccion}"/>
+                    <p:outputLabel value="Estado"/>
+                    <p:selectOneMenu value="#{proveedoresControlador.proveedor.estadoProveedor}" converter="#{estadoProveedorConverter}">
+                        <f:selectItem itemLabel="--Seleccione--"/>
+                        <f:selectItems value="#{proveedoresControlador.estadoProveedores}" var="eproveedor" itemLabel="#{eproveedor.nombreEstadoProveedor}" itemValue="#{eproveedor}"/>
+                    </p:selectOneMenu>
+                </h:panelGrid>
+                <br/>
+                <p:commandButton value="Modificar" actionListener="#{proveedoresControlador.modificarProveedor(proveedoresControlador.proveedor)}" oncomplete="PF('wdlgDatos').hide();" update=":tabla:data"/>
+                <p:commandButton value="Cancelar" immediate="true" oncomplete="PF('wdlgDatos').hide();"/>
+            </h:form>
+        </p:dialog>
+    </h:body>
+</html>

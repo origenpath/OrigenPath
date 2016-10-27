@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <p:toolbar>
+        <f:facet name="left">
+            <p:link outcome="/index.xhtml">
+                <h:graphicImage library="images" name="logobanner.jpg" />
+            </p:link>
+        </f:facet>
+        <f:facet name="right">
+            <h:form>
+                <p:menuButton value="Personas">
+                    <p:menuitem value="Personas" outcome="/administracion/personas.xhtml" icon="ui-icon-arrowreturnthick-1-e"/>                    
+                </p:menuButton>
+                <p:menuButton value="Productos">
+                    <p:menuitem value="Productos" outcome="/administracion/Productos.xhtml" icon="ui-icon-arrowreturnthick-1-e"/>                    
+                </p:menuButton>
+                <p:menuButton value="Proveedores">
+                    <p:menuitem value="Proveedor" outcome="/administracion/Proveedores.xhtml" icon="ui-icon-arrowreturnthick-1-e"/>                    
+                </p:menuButton>
+                <p:menuButton value="Kits">
+                    <p:menuitem value="Kits" outcome="/administracion/kit.xhtml"/>
+                </p:menuButton>
+                <p:menuButton value="Pedidos">
+                    <p:menuitem value="Pedidos" outcome="/administracion/Pedidos.xhtml"/>
+                </p:menuButton>
+                <p:menuButton value="Configuración">
+                    <p:menuitem value="Barrios" outcome="/administracion/barrios.xhtml" icon="ui-icon-arrowreturnthick-1-e"/>
+                    <p:menuitem value="Estado Civil" outcome="/administracion/estadoCivil.xhtml" icon="ui-icon-arrowreturnthick-1-e"/>
+                    <p:menuitem value="Genero" outcome="/administracion/genero.xhtml"  icon="ui-icon-arrowreturnthick-1-e"/>
+                    <p:menuitem value="Estado Personas" outcome="/administracion/estadoPersonas.xhtml"  icon="ui-icon-arrowreturnthick-1-e"/>
+                    <p:menuitem value="Roles" outcome="/administracion/rol.xhtml"  icon="ui-icon-arrowreturnthick-1-e"/>
+                    <p:menuitem value="Estado Proveedor" outcome="/administracion/estadoProveedor.xhtml" icon="ui-icon-arrowreturnthick-1-e"/>
+                    <p:menuitem value="Estado Producto" outcome="/administracion/estadoProducto.xhtml" icon="ui-icon-arrowreturnthick-1-e"/>
+                    <p:menuitem value="Tipo Producto" outcome="/administracion/tipoProducto.xhtml"  icon="ui-icon-arrowreturnthick-1-e"/>
+                </p:menuButton>
+                <p:menuButton value="Ayuda">
+                    <p:menuitem value="Acerca de" oncomplete="PF('acerca').show();"/>
+                    <p:menuitem value="Ayuda" oncomplete="PF('ayuda').show();"/>
+                </p:menuButton>
+                <p:dialog header="Arceca de" widgetVar="acerca" modal="true">
+                    <h:panelGrid style="margin: 0 auto;">                        
+                        <p:graphicImage library="images" name="logobanner.jpg"/>
+                    </h:panelGrid>
+                    <p>
+                        Para la empresa comercializadora "Origen PTAH", como sistema de control de ventas
+                        de los productos elaborados por la empresa "Natural conexion".<br/>
+                        Elaborado como proyecto de grado del programa academico "Tecnologia en sistematización de datos" del 
+                        Politecnico Colombiano Jaime Isaza Cadavid.
+                    </p>
+                    <p:commandButton value="Cerrar"  immediate="true" oncomplete="PF('acerca').hide();"/>
+                </p:dialog>
+                <p:dialog header="Ayuda" widgetVar="ayuda" modal="true" height="150" width="250">
+                    <hr/>
+                    <h:panelGrid columns="1">
+                        <p:commandLink value="Modulo Personas"/>
+                        <p:commandLink value="Modulo Productos"/>
+                        <p:commandLink value="Modulo Proveedores"/>
+                        <p:commandLink value="Modulo Kits"/>
+                        <p:commandLink value="Modulo Pedidos"/>                    
+                    </h:panelGrid>
+                    <p:commandButton value="Cerrar" immediate="true" oncomplete="PF('ayuda').hide();"/>
+                </p:dialog>
+            </h:form>
+        </f:facet>
+    </p:toolbar>
+</html>
+

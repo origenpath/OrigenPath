@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>Pedidos</title>
+        <h:outputStylesheet library="css" name="barrio.css" />
+        <h:outputStylesheet library="css" name="personas.css"/>
+    </h:head>
+    <h:body>
+        <ui:include src="../template.xhtml"/>
+        <h:form>
+            <h1>Adminstrar Pedidos</h1>
+            <p:fieldset legend="Pedido">
+                <h:panelGrid columns="3" columnClasses="grid">
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="Codigo Pedido"/>
+                        <p:inputText value="#{pedidosControlador.pedidos.codigoPedido}"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="Fecha Pedido"/>
+                        <p:calendar value="#{pedidosControlador.pedidos.fechaPedido}"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+            
+                <h:panelGroup>                    
+                    <p:outputLabel value="Buscar Producto: "/>
+                    <p:autoComplete value="#{pedidosControlador.pro}" completeMethod="#{pedidosControlador.completeString}"
+                                    var="pro" itemLabel="#{pro.nombreProducto}" itemValue="#{pro}"
+                                    converter="#{productosConverter}">
+                        <p:column headerText="Código">
+                            <h:outputText value="#{pro.referenciaProducto}"/>
+                        </p:column>
+
+                        <p:column headerText="Nombre">
+                            <h:outputText value="#{pro.nombreProducto}"/>
+                        </p:column>
+
+                        <p:column headerText="Cantidad">
+                            <h:outputText value="#{pro.cantidadProducto}"/>
+                        </p:column>
+                    </p:autoComplete>
+                    
+                    <p:outputLabel class="lblcantidad" value="Cant: "/>
+                    <p:inputText class="cantidad" value="#{pedidosControlador.detallePedido.cantidadProducto}"/>
+                    <p:commandButton class="agregar" value="Agregar" actionListener="#{pedidosControlador.agregar()}" update="detalleped"/>
+                </h:panelGroup>
+                <br/>
+                <br/>
+                <p:dataTable id="detalleped" value="#{pedidosControlador.listaDetalle}" var="detalle">
+                    <p:column headerText="Codigo Pedido">
+                        <h:outputText value="#{detalle.codigoPedido}"/>
+                    </p:column>
+                    <p:column headerText="Codigo Producto">
+                        <h:outputText value="#{detalle.codigoProducto}"/>
+                    </p:column>
+                    <p:column headerText="Nombre Producto">
+                        <h:outputText value="#{detalle.codigoProducto.nombreProducto}"/>
+                    </p:column>
+                    <p:column headerText="Cantidad Producto">
+                        <h:outputText value="#{detalle.cantidadProducto}"/>
+                    </p:column>
+                    <p:column headerText="Valor Producto">
+                        <h:outputText value="#{detalle.valorProducto}"/>
+                    </p:column>
+                </p:dataTable>
+            </p:fieldset>
+        </h:form>
+    </h:body>
+</html>
+

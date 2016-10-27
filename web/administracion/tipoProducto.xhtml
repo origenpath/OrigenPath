@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>Tipo Producto</title>
+        <h:outputStylesheet library="css" name="barrio.css" />
+    </h:head>
+    <h:body>
+        <ui:include src="../template.xhtml" />
+        <h:form id="ftp">
+            <h1>Administrar Tipo Producto</h1>
+            <p:growl id="messages" autoUpdate="true" life="4000"/>
+            <p:fieldset legend="Información General">
+                <h:panelGrid columns="2">
+                    <p:outputLabel for="codigotp" value="Código Tipo Producto "/>
+                    <p:inputText id="codigotp" value="#{tipoProductoControlador.tipoProducto.idTipoProducto}" required="true"
+                                  requiredMessage="Este campo es obligatorio debe llenarlo"/>
+
+                    <p:outputLabel for="nombretp" value="Nombre Tipo Producto "/>                    
+                    <p:inputText id="nombretp" value="#{tipoProductoControlador.tipoProducto.nombreTipoProducto}" required="true"
+                                  requiredMessage="Este campo es obligatorio debe llenarlo"/>
+                </h:panelGrid>
+            </p:fieldset>
+            <br/>
+            <p:commandButton value="Guardar" actionListener="#{tipoProductoControlador.guardarTipoProducto()}" update=":ftabla:data,ftp"/>
+        </h:form>
+
+        <br/>
+        <br/>
+        <h:form id="ftabla">
+            <p:dataTable var="tp" id="data" value="#{tipoProductoControlador.listarTipoProductos()}">
+                <p:column headerText="Código Tipo Producto">
+                    <h:outputText value="#{tp.idTipoProducto}"/>
+                </p:column>
+                <p:column headerText="Nombre Tipo Producto">
+                    <h:outputText value="#{tp.nombreTipoProducto}"/>
+                </p:column>
+                <p:column style="width: 40px">
+                    <p:commandLink  actionListener="#{tipoProductoControlador.buscarTipoProducto(tp.idTipoProducto)}" oncomplete="PF('wdlgDatos').show();" update=":dlgDatos" styleClass="ui-icon ui-icon-pencil"/> 
+                    <p:commandLink  actionListener="#{tipoProductoControlador.eliminarTipoProducto(tp.idTipoProducto)}" update="data" styleClass="ui-icon ui-icon-trash"/>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+        <p:dialog header="Modificar" widgetVar="wdlgDatos" id="dlgDatos">
+            <h:form>
+                <h:panelGrid >
+                    <p:outputLabel  value="Código Tipo Producto"/>
+                    <p:inputText  value="#{tipoProductoControlador.tipoProducto.idTipoProducto}"/>
+
+                    <p:outputLabel  value="Nombre Tipo Producto"/>                    
+                    <p:inputText  value="#{tipoProductoControlador.tipoProducto.nombreTipoProducto}"/>
+
+                </h:panelGrid>
+                <br/>
+                <p:commandButton value="Modificar" actionListener="#{tipoProductoControlador.editarTipoProducto(tipoProductoControlador.tipoProducto)}" oncomplete="PF('wdlgDatos').hide();" update=":ftabla:data"/>
+                <p:commandButton value="Cancelar"  immediate="true" oncomplete="PF('wdlgDatos').hide();"/>
+            </h:form>
+        </p:dialog>
+    </h:body>
+</html>
+

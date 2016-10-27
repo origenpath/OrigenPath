@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>Estado Civil</title>
+        <h:outputStylesheet library="css" name="barrio.css" />
+    </h:head>
+    <h:body>
+        <ui:include src="../template.xhtml"/>
+        <h:form id="festadoc">
+            <h1>Administrar Estado Civil</h1>
+            <p:growl id="messages" autoUpdate="true" life="4000"/>
+            <p:fieldset legend="Información General">
+                <h:panelGrid columns="2">
+                    <p:outputLabel for="codigoe" value="Código"/>
+                    <p:inputText id="codigoe" value="#{estadoCivilControlador.estadoCivil.idEstadoCivil}"/>
+
+                    <p:outputLabel for="nombree" value="Nombre"/>                    
+                    <p:inputText id="nombree" value="#{estadoCivilControlador.estadoCivil.nombreEstadoCivil}" required="true"
+                                 requiredMessage="Este campo es obligatorio debe llenarlo"/>
+                </h:panelGrid>
+            </p:fieldset>
+            <br/>
+            <p:commandButton value="Guardar Registro" actionListener="#{estadoCivilControlador.gurdarEstadoCivil()}" update=":ftabla:data,festadoc"/>
+        </h:form>
+        <br/>
+        <br/>
+        <h:form id="ftabla">
+            <p:dataTable var="b" id="data" value="#{estadoCivilControlador.listarEstadoCivil()}">
+                <p:column headerText="Código">
+                    <h:outputText value="#{b.idEstadoCivil}"/>
+                </p:column>
+                <p:column headerText="Nombre">
+                    <h:outputText value="#{b.nombreEstadoCivil}"/>
+                </p:column>
+                <p:column style="width: 30px">
+                    <p:commandLink actionListener="#{estadoCivilControlador.buscarEstadoCivil(b.idEstadoCivil)}" oncomplete="PF('wdlgDatos').show();" update=":dlgDatos" styleClass="ui-icon ui-icon-pencil"/> 
+                    <p:commandLink actionListener="#{estadoCivilControlador.eliminarBarrio(b.idEstadoCivil)}" update="data" styleClass="ui-icon ui-icon-trash"/>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+
+        <p:dialog header="Modificar" widgetVar="wdlgDatos" id="dlgDatos">
+            <h:form>
+                <h:panelGrid columns="2">
+                    <p:outputLabel  value="Código "/>
+                    <p:inputText  value="#{estadoCivilControlador.estadoCivil.idEstadoCivil}"/>
+
+                    <p:outputLabel  value="Nombre "/>                    
+                    <p:inputText  value="#{estadoCivilControlador.estadoCivil.nombreEstadoCivil}"/>
+
+                </h:panelGrid>
+                <br/>
+                <p:commandButton value="Modificar" actionListener="#{estadoCivilControlador.editarEstadoCivil(estadoCivilControlador.estadoCivil)}" oncomplete="PF('wdlgDatos').hide();" update=":ftabla:data"/>
+                <p:commandButton value="Cancelar"  immediate="true" oncomplete="PF('wdlgDatos').hide();"/>
+            </h:form>
+        </p:dialog>
+    </h:body>
+</html>
+
